@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Car Price Estimator</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="/static/styles.css" />
+
+
+</head>
+
+<body>
+    <div class="page">
+
+
+
+        <header class="header">
+            <div>
+                <p class="header-eyebrow">ML Model Interface · Model 02</p>
+                <h1>Car<span>Valuation</span></h1>
+            </div>
+            <div class="header-tag">
+                Vehicle<br>Estimate<br>Engine v1.0
+            </div>
+        </header>
+
+        <form id="predForm">
+            <div class="form-grid">
+
+                <!-- Section 1: Specs -->
+                <div class="section">
+                    <div class="section-header">
+                        <span class="section-num">02 —</span>
+                        <span class="section-title">Specs & Drivetrain</span>
+                    </div>
+                    <div class="fields">
+                        <div class="field">
+                            <label>Mileage (km)</label>
+                            <div class="range-wrap">
+                                <div class="range-val" id="mileageVal">18 <sup>km</sup></div>
+                                <input type="range" id="mileage" min="15" max="25" step="1" value="18"
+                                    oninput="document.getElementById('mileageVal').innerHTML = Number(this.value).toLocaleString() + ' <sup>km</sup>'" />
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label>Engine (CC)</label>
+                            <div class="range-wrap">
+                                <div class="range-val" id="engineVal">1000 <sup>cc</sup></div>
+                                <input type="range" id="engine" min="800" max="1500" step="10" value="1000"
+                                    oninput="document.getElementById('engineVal').innerHTML = parseFloat(this.value).toFixed(1) + ' <sup>cc</sup>'" />
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label>Torque (Nm)</label>
+                            <div class="range-wrap">
+                                <div class="range-val" id="torqueVal">100 <sup>Nm</sup></div>
+                                <input type="range" id="torque" min="60" max="250" step="1" value="100"
+                                    oninput="document.getElementById('torqueVal').innerHTML = parseFloat(this.value).toFixed(1) + ' <sup>Nm</sup>'" />
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label>Horsepower (hp)</label>
+                            <div class="range-wrap">
+                                <div class="range-val" id="maxPowerVal">60 <sup>hp</sup></div>
+                                <input type="range" id="maxPower" min="35" max="108" step="1" value="60"
+                                    oninput="document.getElementById('maxPowerVal').innerHTML = parseFloat(this.value).toFixed(1) + ' <sup>hp</sup>'" />
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label>Fuel Type</label>
+                            <select id="fueltype" required>
+                                <option value="Petrol" >Petrol</option>
+                                <option value="Diesel" >Diesel</option>
+                                <option value="LPG" >LPG</option>
+                                <option value="CNG">CNG</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label>Transmission</label>
+                            <select id="transmission" required>
+                                <option value="Automatic" >Automatic</option>
+                                <option value="Manual" >Manual</option>
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Section 2: Condition -->
+                <div class="section">
+                    <div class="section-header">
+                        <span class="section-num">03 —</span>
+                        <span class="section-title">Condition & History</span>
+                    </div>
+                    <div class="fields">
+                        <div class="field">
+                            <label>Car Age (years)</label>
+                            <div class="range-wrap">
+                                <div class="range-val" id="carAgeVal">15 <sup>years</sup></div>
+                                <input type="range" id="carAge" min="10" max="30" step="1" value="15"
+                                    oninput="document.getElementById('carAgeVal').innerHTML = Number(this.value).toLocaleString() + ' <sup>km</sup>'" />
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label>Driven Distance (km)</label>
+                            <div class="range-wrap">
+                                <div class="range-val" id="DrivenDistanceval">8000 <sup>km</sup></div>
+                                <input type="range" id="DrivenDistance" min="5500" max="13000" step="100" value="8000"
+                                    oninput="document.getElementById('DrivenDistanceval').innerHTML = Number(this.value).toLocaleString() + ' <sup>km</sup>'" />
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label>Number of Owners</label>
+                            <select id="NumOfOwner" required>
+                                <option value="First Owner" selected>1 — First Owner</option>
+                                <option value="Second Owner" >2 — Second Owner</option>
+                                <option value="Third Owner" >3 — Third Owner</option>
+                                <option value="Fourth & Above Owner" >4+ — Multiple Owners</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+            </div><!-- /form-grid -->
+
+            <div class="predict-wrap">
+                <button id="btn-predict" class="btn-predict" type="button">
+                    <span id="btnTxt">Estimate Value →</span>
+                </button>
+                <div class="loading-dots" id="dots">
+                    <span></span><span></span><span></span>
+                </div>
+                <div class="result-card" id="resultCard">
+                    <div class="result-label">Estimated Market Value</div>
+                    <div class="result-price" id="resultPrice">—</div>
+                    <div class="result-range" id="resultRange"></div>
+                </div>
+                <a class="about-link" href="static/car-about.html">About this model ↗</a>
+            </div>
+
+        </form>
+    </div>
+
+
+    <script src="/static/script.js"></script>
+
+</body>
+
+</html>

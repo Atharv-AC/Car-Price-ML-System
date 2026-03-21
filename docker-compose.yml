@@ -1,0 +1,90 @@
+version: "3.9"
+
+services:
+
+  # ==========================
+  # FastAPI Application Service
+  # ==========================
+  api:
+    build: .
+    container_name: car_price_api   # Name of the API container (easier debugging)
+
+    # Mount local project folder into container
+    # Allows hot reload when code changes
+    volumes:
+      - .:/app
+
+    # Map host port -> container port
+    # Access API from browser: localhost:8000
+    ports:
+      - "8000:8000"
+
+    # Wait until database container is healthy before starting API
+    depends_on:
+      db:
+        condition: service_healthy
+
+    environment:
+      # Database connection string used by SQLAlchemy
+      DATABASE_URL: mysql+pymysql://root:password123@db:3306/car_price_db
+
+      # Allows Python to find your source code modules
+      PYTHONPATH: /app/src
+
+    # Command to start FastAPI server
+    # --reload automatically reloads server when code changes
+    command: >
+      uvicorn car_price_prediction.api:app
+      --host 0.0.0.0
+      --port 8000
+
+    # Restart API if it crashes
+    restart: unless-stopped
+
+
+
+  # ==========================
+  # MySQL Database Service
+  # ==========================
+  db:
+    image: mysql:8
+
+    container_name: car_price_db
+
+    # Always restart database if it crashes
+    restart: always
+
+    environment:
+      # Root password
+      MYSQL_ROOT_PASSWORD: password123
+
+      # Database automatically created on startup
+      MYSQL_DATABASE: car_price_db
+
+      # Create application user automatically
+      MYSQL_USER: fastapi_user
+      MYSQL_PASSWORD: password123
+
+    # Map host port 3307 -> container MySQL port
+    ports:
+      - "3307:3306"
+
+    # Persist database data even if container is deleted
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+    # Healthcheck ensures DB is ready before API starts
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-ppassword123"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+
+
+# ==========================
+# Named Volumes
+# ==========================
+# This keeps database data persistent
+volumes:
+  mysql_data:

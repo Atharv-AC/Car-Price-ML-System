@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Python builds
+build/
+dist/
+*.egg-info/
+
+# Virtual env
+venv/
+.env
+
+# Data
+data/*
+!data/Car_details.csv
+
+# Models
+models/*
+!models/latest.joblib
+
+# Logs
+*.log
+
+# Runtime
+*.pid
+*.seed
+*.out
+*.err
+
+# Testing
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.history/
+
+# OS
+.DS_Store
+
+# Database
+*.db
+*.sqlite3
+
+# Docker
+docker-compose.override.yml
+
+commands.txt
+
+structure.txt
+
+.coverage
+.coverage.*

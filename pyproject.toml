@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "car_price_prediction"
+version = "0.1.0"
+description = "Car price prediction ML pipeline"
+authors = [{name="Atharv"}]
+readme = "README.md"
+requires-python = ">=3.10"
+
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "numpy",
+    "pandas",
+    "scikit-learn",
+    "joblib",
+    "pydantic",
+    "pydantic-settings",
+    "PyYAML",
+    "SQLAlchemy",
+    "pymysql",
+    "cryptography"
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]

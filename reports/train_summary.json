@@ -1,0 +1,14 @@
+{
+    "model_type": "rf",
+    "best_alpha": {
+        "model__n_estimators": 200,
+        "model__min_samples_split": 5,
+        "model__min_samples_leaf": 1,
+        "model__max_features": "log2",
+        "model__max_depth": 20
+    },
+    "cv_score": 0.898935371953335,
+    "test_r2": 0.9629758030675737,
+    "train_r2": 0.9098261785139903,
+    "timestamp": "2026-03-12 18:33:25"
+}
