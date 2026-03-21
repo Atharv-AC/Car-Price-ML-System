@@ -8,3 +8,4 @@ pydantic
 pydantic-settings
 PyYAML
 SQLAlchemy
+psycopg2-binary

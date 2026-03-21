@@ -22,7 +22,9 @@ dependencies = [
     "PyYAML",
     "SQLAlchemy",
     "pymysql",
-    "cryptography"
+    "cryptography",
+    "psycopg2-binary",
+    "python-dotenv"
 ]
 
 [tool.setuptools.packages.find]
