@@ -20,8 +20,8 @@ COPY reports /app/reports
 
 
 # expose means that this port will be available to the outside world
-EXPOSE 8000
+EXPOSE 10000
 
 
 # command to run on container start
-CMD ["uvicorn", "car_price_prediction.api:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "car_price_prediction.api:app", "--host", "0.0.0.0", "--port", "10000"]
