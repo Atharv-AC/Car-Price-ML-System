@@ -22,6 +22,12 @@ Unlike typical ML projects, this repository focuses on **machine learning system
 
 ---
 
+
+## 🚀Live Demo:
+https://car-price-ml-system.onrender.com/
+
+---
+
 # 🎯 System Overview
 
 The system predicts **used car selling prices** using a **Random Forest regression model** and exposes predictions through a **FastAPI API**.
@@ -37,12 +43,11 @@ git clone https://github.com/Atharv-AC/Car-Price-ML-System.git
 cd car-price-prediction
 docker compose up --build
 
-```
 
 Open:
 http://localhost:8000/docs
 
-
+```
 
 
 ---
@@ -199,7 +204,7 @@ Docker Compose
     Prediction Logging
 ```
 <div align="center">
-  <img src="docs/mermaid-diagram (3).png" width="900"/>
+  <img src="docs/mermaid-diagram (3).png" width="900" />
 </div>
 
 This ensures **reproducible deployment environments**.
@@ -219,6 +224,17 @@ This ensures **reproducible deployment environments**.
 5️⃣ The prediction and input payload are stored in **MySQL**.
 
 6️⃣ The API returns the predicted price to the client.
+
+---
+
+# UI Preview
+### Home Page 
+<img src="docs/image1.png" alt="Home page" width=600>
+<img src="docs/image2.png" alt="Home page" width=600>
+
+### About Page
+<img src="docs/image3.png" alt="About page" width=600>
+<img src="docs/image4.png" alt="About page" width=600>
 
 ---
 
