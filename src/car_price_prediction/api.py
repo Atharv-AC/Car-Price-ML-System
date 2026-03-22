@@ -1,9 +1,7 @@
 from pydantic import BaseModel
 from fastapi import FastAPI, HTTPException, Depends
-from car_price_prediction.loader import load_model
 from contextlib import asynccontextmanager
 from car_price_prediction.config import settings
-from car_price_prediction.predict import CarPriceModel
 from car_price_prediction.logger import get_logger
 from car_price_prediction.database.connection import SessionLocal, engine, Base
 from car_price_prediction.database.repository import save_prediction
@@ -48,7 +46,7 @@ REPORT_DIR = BASE_DIR / "reports/model_summary.json"
 
 
 # * Request body schema expected by the prediction endpoint.
-class car(BaseModel):
+class Car(BaseModel):
     mileage: float
     engine: float
     max_power: float
@@ -60,38 +58,79 @@ class car(BaseModel):
     owner: str
 
 # lifespan will run before the first request. It is used to load the model and save it in app state
+from threading import Thread
+
 @asynccontextmanager
 async def lifespans(app: FastAPI):
 
-    # always define state variables first
+    # -----------------------------------------
+    # Step 1: Initialize app state
+    # -----------------------------------------
+    # This stores model in memory (shared across requests)
     app.state.model_loaded = False
     app.state.model = None
-    
 
-    # ✅ Load model FIRST (independent)
+
+    # -----------------------------------------
+    # Step 2: Define background function
+    # -----------------------------------------
+    def load_model_in_background():
+        """
+        This function runs in a SEPARATE THREAD.
+
+        Why?
+        - So app can start instantly
+        - Model loads without blocking startup
+        """
+
+        try:
+            # Import inside function to avoid slow startup
+            from car_price_prediction.loader import load_model
+            from car_price_prediction.predict import CarPriceModel
+
+            # Load trained ML model from disk
+            model = load_model()
+
+            # Wrap model (your prediction wrapper)
+            app.state.model = CarPriceModel(model)
+
+            # Mark model as ready
+            app.state.model_loaded = True
+
+            logger.info("✅ Model loaded successfully in background")
+
+        except Exception:
+            logger.error("❌ Model failed to load", exc_info=True)
+
+
+    # -----------------------------------------
+    # Step 3: Start background thread
+    # -----------------------------------------
+    Thread(target=load_model_in_background, daemon=True).start() # daemon=True ensures thread doesn't block shutdown
+
+    # 👉 This line is KEY:
+    # It allows FastAPI to continue startup WITHOUT waiting
+
+
+    # -----------------------------------------
+    # Step 4: Setup database (non-blocking)
+    # -----------------------------------------
     try:
-        # * Load and wrap the trained model once during startup.
-        model = load_model()
-        app.state.model = CarPriceModel(model)
-        app.state.model_loaded = True
-        logger.info("Model loaded successfully")
-
-    except Exception:
-        # exc_info=True will log the full traceback
-        logger.error("Model failed to load: ", exc_info=True)
-
-
-    # ✅ Load database SECOND (dependent)
-    try:
-        wait_for_db(engine)
+        wait_for_db(engine, retries=1, delay=1)
         Base.metadata.create_all(bind=engine)
         logger.info("Database ready")
-    except Exception:
-        logger.warning("Database not available, continuing without DB")
+    except:
+        logger.warning("Database not available, continuing...")
 
+
+    # -----------------------------------------
+    # Step 5: Yield control to FastAPI
+    # -----------------------------------------
     yield
 
+    # Runs on shutdown
     logger.info("Shutting down")
+
 
 app = FastAPI(lifespan=lifespans)
 
@@ -131,7 +170,7 @@ def get_model():
     # ! Dependency guard: inference endpoints should fail first until model is ready.
     if not app.state.model_loaded:
         # 503 Service Unavailable
-        raise HTTPException(status_code=503, detail="Model not loaded")
+        raise HTTPException(status_code=503, detail="Model is still loading, please try again in a few seconds")
     return app.state.model
 
 
@@ -146,16 +185,17 @@ def get_db():
 # with open(REPORT_DIR, "r") as f:
 #     data = json.load(f)
 
+with open(REPORT_DIR) as f:
+    MODEL_METADATA = json.load(f)
 
 @app.post("/predict-car")
-def predict_price(features: car, model = Depends(get_model), db = Depends(get_db)): # dependincy injection for database and model
+def predict_price(features: Car, model = Depends(get_model), db = Depends(get_db)): # dependincy injection for database and model
 
 
     # * Convert validated Pydantic model to dict before passing into model wrapper.
     price = model.predict(features.model_dump())
     input_data = features.model_dump()
 
-    MODEL_METADATA = json.load(open(REPORT_DIR))
  
     try:
        if db and settings.app_env != "test":
@@ -177,12 +217,12 @@ def predict_price(features: car, model = Depends(get_model), db = Depends(get_db
 # get request for health check it ensures that the model is loaded and returns a true/false
 @app.get("/health")
 def health_info():
-    if not app.state.model_loaded:
-        raise HTTPException(status_code=503, detail="Model not loaded")
+    # if not app.state.model_loaded:
+    #     raise HTTPException(status_code=503, detail="Model not loaded")
     
     return {
             "status": "ok",
-            "model_loaded": True
+            "model_loaded": app.state.model_loaded
             }
 
 
