@@ -121,6 +121,20 @@ def model_rf(preprocessor, X_train, y_train, X_test, y_test):
 
         best_model = grid.best_estimator_
 
+        # from sklearn.inspection import permutation_importance
+
+        # # feature importance
+        # result = permutation_importance(
+        #     best_model, X_test, y_test, n_repeats=10, random_state=42
+        # )
+
+        # importance = pd.DataFrame({
+        #     "feature": X_test.columns,
+        #     "importance": result.importances_mean
+        # }).sort_values(by="importance", ascending=False)
+
+        # print(importance.head(10))
+
         return best_model, grid, grid.best_params_, grid.best_score_, grid.score(X_train, y_train), grid.score(X_test, y_test)
 
         
@@ -163,8 +177,19 @@ def model_rf(preprocessor, X_train, y_train, X_test, y_test):
         # Test Mean Absolute error: 0.14100274625976136
         # ----------------------------------- 
 
+                    #   feature  importance
+        # 7             car_age    0.613105
+        # 5           max_power    0.109581
+        # 6              torque    0.095946
+        # 3             mileage    0.036146
+        # 4              engine    0.031487
+        # 2               owner    0.022220
+        # 0                fuel    0.014741
+        # 8  km_driven_per_year    0.011628
+        # 1        transmission    0.003838
 
-# # model_rf(preprocessor, X_train, y_train, X_test, y_test)
+
+model_rf(preprocessor, X_train, y_train, X_test, y_test)
 
 
 def model_linear(preprocessor, X_train, y_train):
@@ -174,3 +199,4 @@ def model_linear(preprocessor, X_train, y_train):
         pipeline.fit(X_train, y_train)
 
         return pipeline
+

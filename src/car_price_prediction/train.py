@@ -48,6 +48,8 @@ def train_randomforest_model(config):
         from car_price_prediction.pipeline.features import build_preprocessor
         from sklearn.model_selection import train_test_split
         from car_price_prediction.pipeline.train_model import model_rf
+        from sklearn.metrics import mean_absolute_error, root_mean_squared_error
+        import numpy as np
 
         df = load_csv()
 
@@ -78,17 +80,38 @@ def train_randomforest_model(config):
               "model_file": model_filename
         }
 
+        # predictions in log scale
+        pred = model.predict(X_test)
+
+        # convert to original scale
+        y_test_actual = np.exp(y_test)
+        pred_actual = np.exp(pred)
+
+        # mape = mean absolute percentage error 
+        mape = np.mean(np.abs((y_test_actual - pred_actual) / y_test_actual)) * 100
+
+        # compute correct metrics
+        mae = mean_absolute_error(y_test_actual, pred_actual)
+        rmse = root_mean_squared_error(y_test_actual, pred_actual)
+
+
         logger.info("Best alpha: %s", best_params)
         logger.info("Best CV score: %s", cv_scores)
-        logger.info("Test R2: %s", r2)
-        logger.info("Training R2: %s", Tr2)
+        logger.info("Training R2: %s", r2)
+        logger.info("Test R2: %s", Tr2)
+        logger.info("MAE: %s", mae)
+        logger.info("RMSE: %s", rmse )
+        logger.info("MAPE: %s", mape)
 
         summary = {
             "model_type": "rf",
             "best_alpha": best_params,
             "cv_score": cv_scores,
-            "test_r2": r2,
-            "train_r2": Tr2,
+            "train_r2": r2,
+            "test_r2": Tr2,
+            "MAE": mae,
+            "RMSE": rmse,
+            "MAPE": mape,
             "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
             
