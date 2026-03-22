@@ -227,12 +227,12 @@ def health_info():
 
 
 # get request for model metadata it will not return anything if the model is not loaded
-@app.get("/model-info")
+@app.get("/model-info-car")
 def load_model_metadata():
     from pathlib import Path
     
     # * Runtime metadata written during training; used for quick model introspection.
-    REPORT_PATH = Path("reports/model_summary.json")
+    REPORT_PATH = Path("reports/train_summary.json")
 
     try:
         with open(REPORT_PATH) as fi:
@@ -242,6 +242,25 @@ def load_model_metadata():
         logger.error("Model Metadata failed to load: ", exc_info=True)
         # 500 Internal Server Error
         raise HTTPException(status_code=500, detail="Model Metadata not found")
+
+
+
+@app.get("/predictions-car")
+def get_predictions(db = Depends(get_db)):
+
+    from car_price_prediction.database.models import Prediction
+
+    # * Return the last 10 predictions
+    records = db.query(Prediction).order_by(Prediction.id.desc()).limit(10).all()
+
+    # * Convert to JSON with only price and timestamp
+    return [
+        {
+            "price": r.predicted_price,
+            "timestamp": r.timestamp
+        }
+        for r in records
+    ]
 
 
 # {
