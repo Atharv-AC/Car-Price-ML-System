@@ -257,12 +257,13 @@ def get_predictions(db = Depends(get_db)):
     return [
         {
             "price": r.predicted_price,
-            "timestamp": r.timestamp
+            "timestamp": r.timestamp,
+            **r.features   # unpack all features
         }
         for r in records
     ]
 
-
+# {"mileage": 18.0, "engine": 1000.0, "max_power": 60.0, "torque": 100.0, "km_driven_per_year": 8000.0, "car_age": 15.0, "fuel": "Petrol", "transmission": "Automatic", "owner": "First Owner"}
 # {
 #   "mileage": 12,
 #   "engine": 234,
