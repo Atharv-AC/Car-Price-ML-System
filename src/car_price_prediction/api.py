@@ -17,7 +17,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 
 
-def wait_for_db(engine, retries=1, delay=3):
+def wait_for_db(engine, retries=10, delay=3):
     """
     Wait until the database becomes available.
     Prevents startup race condition in Docker.
