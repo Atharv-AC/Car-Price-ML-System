@@ -26,7 +26,7 @@ services:
 
     environment:
       # Database connection string used by SQLAlchemy
-      DATABASE_URL: mysql+pymysql://root:password123@db:3306/car_price_db
+      DATABASE_URL: ${DATABASE_URL}
 
       # Allows Python to find your source code modules
       PYTHONPATH: /app/src
@@ -37,6 +37,7 @@ services:
       uvicorn car_price_prediction.api:app
       --host 0.0.0.0
       --port 8000
+      --reload
 
     # Restart API if it crashes
     restart: unless-stopped
@@ -56,14 +57,14 @@ services:
 
     environment:
       # Root password
-      MYSQL_ROOT_PASSWORD: password123
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
 
       # Database automatically created on startup
-      MYSQL_DATABASE: car_price_db
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
 
       # Create application user automatically
-      MYSQL_USER: fastapi_user
-      MYSQL_PASSWORD: password123
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
 
     # Map host port 3307 -> container MySQL port
     ports:

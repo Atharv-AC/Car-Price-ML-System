@@ -13,7 +13,7 @@ REPORT_PATH = ROOT_DIR / "reports"
 class Settings(BaseSettings):
     app_env: str = "dev"                 #* dev, test, docker, prod this can be defined in .env and passed to the container
     log_level: str = "INFO"              
-    model_path: str | None = None
+    model_path: Path | None = None
     database_url: str | None = None     #* Database URL
 
     
@@ -23,27 +23,23 @@ class Settings(BaseSettings):
 
         # Docker container networking
         if self.app_env == "docker":
-            return "/app/models/latest.joblib"
+            return Path("/app/models/latest.joblib")
 
         # Local machine (for pytest or local dev)
-        return "models/latest.joblib"
+        return MODEL_PATH
     
     def get_database_url(self):
         # 1. FIRST priority → environment variable (Render)
         env_db = os.getenv("DATABASE_URL")
         if env_db:
             return env_db
-        
+
         # 2. If passed via pydantic settings
         if self.database_url:
             return self.database_url
+        
+        # Fail fast
+        raise ValueError("DATABASE_URL is not set")
 
-        # 3. Docker container networking
-        if self.app_env == "docker":
-            return "mysql+pymysql://root:password123@db:3306/car_price_db"
-
-        # 4. Local machine (for pytest or local dev)
-        return "mysql+pymysql://root:password123@localhost:3307/car_price_db"
-    
 
 settings = Settings()
