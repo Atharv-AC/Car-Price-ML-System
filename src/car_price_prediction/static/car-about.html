@@ -12,6 +12,7 @@
 </head>
 
 <body>
+  <div id="scroll-progress"></div>
 
   <div class="layout">
 
@@ -27,7 +28,7 @@
         <ul class="toc">
           <li><a href="#intro">Introduction</a></li>
           <li><a href="#goal">Project Goal</a></li>
-          <li><a href="#journey">Engineering Journey</a></li>
+          <li><a href="#journey">Learning Journey</a></li>
 
           <li class="toc-section">
             <div class="toc-section-label">I — ML Foundations</div>
@@ -35,16 +36,26 @@
           <li><a href="#supervised">Supervised Learning</a></li>
           <li><a href="#algorithm">Random Forest</a></li>
           <li><a href="#metrics">Evaluation Metrics</a></li>
-          <li><a href="#residuals">Residual Analysis</a></li>
+          <li><a href="#depreciation">Depreciation Curve</a></li>
 
           <li class="toc-section">
             <div class="toc-section-label">II — System Architecture</div>
           </li>
           <li><a href="#separation">Training vs Inference</a></li>
+          <li><a href="#artifacts">Model Artifacts</a></li>
           <li><a href="#structure">Project Structure</a></li>
+          <li><a href="#config">Config & Dependency</a></li>
           <li><a href="#api">FastAPI Service</a></li>
-          <li><a href="#database">Database Logging</a></li>
-          <li><a href="#docker">Docker Deployment</a></li>
+          <li><a href="#testing">Testing Strategy</a></li>
+          <li><a href="#database">Database Observability</a></li>
+          <li><a href="#docker">Docker Containerization</a></li>
+          <li><a href="#health">Health & Metadata</a></li>
+
+          <li class="toc-section">
+            <div class="toc-section-label">III — Frontend & Flow</div>
+          </li>
+          <li><a href="#frontend">Interaction Flow</a></li>
+          <li><a href="#fullarch">Full Architecture</a></li>
 
           <li class="toc-section">
             <div class="toc-section-label">Outcomes</div>
@@ -63,34 +74,46 @@
       <a class="back-link" href="/">Back to Dashboard</a>
     </aside>
 
-  <!-- ── MAIN ── -->
-  <main>
+    <!-- ── MAIN ── -->
+    <main>
 
-    <!-- Hero -->
-    <div class="hero">
-      <div><a class="back-link" href="/">Back to Dashboard</a></div><br>
-      <div class="hero-eyebrow">ML System Engineering Guide</div>
-      <h1 class="hero-h1">
-        From Notebook<br>to <em>Production</em> ML System
-      </h1>
-      <p class="hero-desc">
-         This project demonstrates how a machine learning model evolves into a full production system —
+      <!-- Hero -->
+      <div class="hero">
+        <div><a class="back-link" href="/">Back to Dashboard</a></div><br>
+        <div class="hero-eyebrow">ML System Engineering Guide</div>
+        <h1 class="hero-h1">
+          From Notebook<br>to <em>Production</em> ML System
+        </h1>
+        <p class="hero-desc">
+          This project demonstrates how a machine learning model evolves into a full production system —
           bridging the gap between a Random Forest experiment and a containerized,
           API-serving inference service with MySQL persistence.
-      </p>
-      <div class="hero-stats">
-        <div class="stat"><div class="stat-num">8</div><div class="stat-label">Stages</div></div>
-        <div class="stat"><div class="stat-num">85%</div><div class="stat-label">Test Coverage</div></div>
-        <div class="stat"><div class="stat-num">3</div><div class="stat-label">API Endpoints</div></div>
-        <div class="stat"><div class="stat-num">4</div><div class="stat-label">Skill Domains</div></div>
+        </p>
+        <div class="hero-stats">
+          <div class="stat">
+            <div class="stat-num">8</div>
+            <div class="stat-label">Stages</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">89%</div>
+            <div class="stat-label">Test Coverage</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">3</div>
+            <div class="stat-label">API Endpoints</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">4</div>
+            <div class="stat-label">Skill Domains</div>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <!-- INTRO -->
-    <div class="doc-section" id="intro">
-      <div class="section-num">§ 01</div>
-      <h2>Introduction</h2>
-     <p>
+      <!-- INTRO -->
+      <div class="doc-section" id="intro">
+        <!-- <div class="section-num">§ 01</div> -->
+        <h2>Introduction</h2>
+        <p>
           Machine learning projects often live and die within the confines of a Jupyter Notebook.
           While notebooks are excellent for experimentation, real-world utility requires
           <strong>production engineering</strong>: structured architecture, persistent logging,
@@ -100,99 +123,150 @@
           This car price prediction system is a complete demonstration of that evolution —
           bridging the gap between a regression algorithm and a consumer-ready web service.
         </p>
-      <div class="code-pair">
-        <div>
-          <div class="code-label">Notebook workflow</div>
-          <div class="code-block"><pre>
+        <div class="code-pair">
+          <div>
+            <div class="code-label">Notebook workflow</div>
+            <div class="code-block">
+              <pre>
 load dataset
 train model
 evaluate accuracy
-save model</pre></div>
-        </div>
-        <div>
-          <div class="code-label">Production requirements</div>
-          <div class="code-block"><pre>
+save model</pre>
+            </div>
+          </div>
+          <div>
+            <div class="code-label">Production requirements</div>
+            <div class="code-block">
+              <pre>
 structured architecture
 artifact management
 API-based inference
 testing + validation
-deployment infrastructure</pre></div>
+deployment infrastructure</pre>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- GOAL -->
-    <div class="doc-section" id="goal">
-      <div class="section-num">§ 02</div>
-      <h2>Project Goal</h2>
-      <p>
-        Beyond predicting prices, the goal was to learn how
-        <strong style="color:var(--navy)">machine learning systems are engineered end-to-end</strong> —
-        reflecting the work of an ML Systems Engineer, not just a data scientist.
-      </p>
-      <div class="pill-list">
-        <span class="pill navy">ML Modeling</span>
-        <span class="pill forest">Software Engineering</span>
-        <span class="pill gold">API Design</span>
-        <span class="pill">Testing Discipline</span>
-        <span class="pill rust">Containerization</span>
-        <span class="pill forest">System Architecture</span>
-        <span class="pill gold">MySQL Logging</span>
+      <!-- GOAL -->
+      <div class="doc-section" id="goal">
+        <!-- <div class="section-num">§ 02</div> -->
+        <h2>Project Goal</h2>
+        <p>
+          Beyond predicting prices, the goal was to learn how
+          <strong style="color:var(--navy)">machine learning systems are engineered end-to-end</strong> —
+          reflecting the work of an ML Systems Engineer, not just a data scientist.
+        </p>
+        <div class="pill-list">
+          <span class="pill navy">ML Modeling</span>
+          <span class="pill forest">Software Engineering</span>
+          <span class="pill gold">API Design</span>
+          <span class="pill">Testing Discipline</span>
+          <span class="pill rust">Containerization</span>
+          <span class="pill forest">System Architecture</span>
+          <span class="pill gold">MySQL Logging</span>
 
-      </div>
-    </div>
-
-    <!-- JOURNEY -->
-    <div class="doc-section" id="journey">
-      <div class="section-num">§ 03</div>
-      <h2>Learning Journey</h2>
-      <p>The project evolved across seven deliberate stages, each introducing new engineering concepts.</p>
-      <div class="journey">
-        <div class="journey-item">
-          <div class="journey-line"><div class="journey-dot"></div><div class="journey-connector"></div></div>
-          <div class="journey-content"><div class="journey-stage">Stage 1</div><div class="journey-text">ML modeling foundations &amp; dataset analysis</div></div>
-        </div>
-        <div class="journey-item">
-          <div class="journey-line"><div class="journey-dot"></div><div class="journey-connector"></div></div>
-          <div class="journey-content"><div class="journey-stage">Stage 2</div><div class="journey-text">Feature engineering pipeline</div></div>
-        </div>
-        <div class="journey-item">
-          <div class="journey-line"><div class="journey-dot"></div><div class="journey-connector"></div></div>
-          <div class="journey-content"><div class="journey-stage">Stage 3</div><div class="journey-text">model training and Selection(Random Forest)</div></div>
-        </div>
-        <div class="journey-item">
-          <div class="journey-line"><div class="journey-dot"></div><div class="journey-connector"></div></div>
-          <div class="journey-content"><div class="journey-stage">Stage 4</div><div class="journey-text">FastAPI inference service</div></div>
-        </div>
-        <div class="journey-item">
-          <div class="journey-line"><div class="journey-dot"></div><div class="journey-connector"></div></div>
-          <div class="journey-content"><div class="journey-stage">Stage 5</div><div class="journey-text">Automated testing framework</div></div>
-        </div>
-        <div class="journey-item">
-          <div class="journey-line"><div class="journey-dot"></div><div class="journey-connector"></div></div>
-          <div class="journey-content"><div class="journey-stage">Stage 6</div><div class="journey-text">MySQL Persistence & Observability Layer</div></div>
-        </div>
-        <div class="journey-item">
-          <div class="journey-line"><div class="journey-dot"></div><div class="journey-connector"></div></div>
-          <div class="journey-content"><div class="journey-stage">Stage 7</div><div class="journey-text">Docker containerization</div></div>
-        </div>
-        <div class="journey-item">
-          <div class="journey-line"><div class="journey-dot"></div></div>
-          <div class="journey-content"><div class="journey-stage">Stage 8</div><div class="journey-text">Frontend user interface</div></div>
         </div>
       </div>
-    </div>
 
-    <!-- PART I -->
-    <div class="part-divider">
-      <div class="part-divider-line"></div>
-      <div class="part-divider-text">Part I — Machine Learning Foundations</div>
-      <div class="part-divider-line"></div>
-    </div>
+      <!-- JOURNEY -->
+      <div class="doc-section" id="journey">
+        <!-- <div class="section-num">§ 03</div> -->
+        <h2>Learning Journey</h2>
+        <p>The project evolved across eight deliberate stages, each introducing new engineering concepts.</p>
+        <div class="journey">
+          <div class="journey-item">
+            <div class="journey-line">
+              <div class="journey-dot"></div>
+              <div class="journey-connector"></div>
+            </div>
+            <div class="journey-content">
+              <div class="journey-stage">Stage 1</div>
+              <div class="journey-text">ML modeling foundations &amp; dataset analysis</div>
+            </div>
+          </div>
+          <div class="journey-item">
+            <div class="journey-line">
+              <div class="journey-dot"></div>
+              <div class="journey-connector"></div>
+            </div>
+            <div class="journey-content">
+              <div class="journey-stage">Stage 2</div>
+              <div class="journey-text">Feature engineering pipeline</div>
+            </div>
+          </div>
+          <div class="journey-item">
+            <div class="journey-line">
+              <div class="journey-dot"></div>
+              <div class="journey-connector"></div>
+            </div>
+            <div class="journey-content">
+              <div class="journey-stage">Stage 3</div>
+              <div class="journey-text">model training and Selection(Random Forest)</div>
+            </div>
+          </div>
+          <div class="journey-item">
+            <div class="journey-line">
+              <div class="journey-dot"></div>
+              <div class="journey-connector"></div>
+            </div>
+            <div class="journey-content">
+              <div class="journey-stage">Stage 4</div>
+              <div class="journey-text">FastAPI inference service</div>
+            </div>
+          </div>
+          <div class="journey-item">
+            <div class="journey-line">
+              <div class="journey-dot"></div>
+              <div class="journey-connector"></div>
+            </div>
+            <div class="journey-content">
+              <div class="journey-stage">Stage 5</div>
+              <div class="journey-text">Automated testing framework</div>
+            </div>
+          </div>
+          <div class="journey-item">
+            <div class="journey-line">
+              <div class="journey-dot"></div>
+              <div class="journey-connector"></div>
+            </div>
+            <div class="journey-content">
+              <div class="journey-stage">Stage 6</div>
+              <div class="journey-text">MySQL Persistence & Observability Layer</div>
+            </div>
+          </div>
+          <div class="journey-item">
+            <div class="journey-line">
+              <div class="journey-dot"></div>
+              <div class="journey-connector"></div>
+            </div>
+            <div class="journey-content">
+              <div class="journey-stage">Stage 7</div>
+              <div class="journey-text">Docker containerization</div>
+            </div>
+          </div>
+          <div class="journey-item">
+            <div class="journey-line">
+              <div class="journey-dot"></div>
+            </div>
+            <div class="journey-content">
+              <div class="journey-stage">Stage 8</div>
+              <div class="journey-text">Frontend user interface</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PART I -->
+      <div class="part-divider">
+        <div class="part-divider-line"></div>
+        <div class="part-divider-text">Part I — Machine Learning Foundations</div>
+        <div class="part-divider-line"></div>
+      </div>
 
       <!-- SUPERVISED LEARNING -->
       <div class="doc-section" id="supervised">
-        <div class="section-num">§ 04</div>
+        <!-- <div class="section-num">§ 04</div> -->
         <h2>Supervised Learning</h2>
         <p>
           Car valuation is a regression task. We use labeled data — pairs of vehicle
@@ -219,19 +293,19 @@ Market Price</pre>
         </div>
       </div>
 
-    <!-- ALGORITHM -->
+      <!-- ALGORITHM -->
       <div class="doc-section" id="algorithm">
-        <div class="section-num">§ 05</div>
+        <!-- <div class="section-num">§ 05</div> -->
         <h2>The Choice of Random Forest</h2>
         <p>
           We selected the <strong>Random Forest Regressor</strong> as our inference engine.
           Instead of relying on a single decision tree, it builds a massive "forest" of trees
           during training and outputs the average prediction.
         </p>
-         <p>
-        Multiple models were trained and evaluated, with Random Forest selected for its ability
-        to capture complex non-linear relationships in car pricing.
-      </p>
+        <p>
+          Multiple models were trained and evaluated, with Random Forest selected for its ability
+          to capture complex non-linear relationships in car pricing.
+        </p>
         <div class="callout">
           <strong>Why Random Forest?</strong> It captures complex, non-linear relationships essentially
           for car pricing (like the disproportionate drop in value during the vehicle's first 2 years)
@@ -239,12 +313,12 @@ Market Price</pre>
         </div>
       </div>
 
- 
-    
 
-     <!-- EVALUATION METRICS -->
+
+
+      <!-- EVALUATION METRICS -->
       <div class="doc-section" id="metrics">
-        <div class="section-num">§ 06</div>
+        <!-- <div class="section-num">§ 06</div> -->
         <h2>Evaluation Metrics</h2>
         <p>To ensure reliability, the model was vetted against three distinct performance indicators:</p>
         <div class="metric-row">
@@ -268,81 +342,95 @@ Market Price</pre>
       </div>
 
 
-    <!-- DEPRECIATION -->
-    <div class="doc-section" id="depreciation">
-      <div class="section-num">§ 07</div>
-      <h2>Depreciation Curve</h2>
-      <p>Vehicle prices decay non-linearly with age and mileage. Log-transforming the target variable helps stabilize variance across price ranges.</p>
-      <div class="code-pair">
-        <div>
-          <div class="code-label">During training</div>
-          <div class="code-block"><pre>y_log = log(price)</pre></div>
-        </div>
-        <div>
-          <div class="code-label">At prediction time</div>
-          <div class="code-block"><pre>price = exp(prediction)</pre></div>
+      <!-- DEPRECIATION -->
+      <div class="doc-section" id="depreciation">
+        <!-- <div class="section-num">§ 07</div> -->
+        <h2>Depreciation Curve</h2>
+        <p>Vehicle prices decay non-linearly with age and mileage. Log-transforming the target variable helps stabilize
+          variance across price ranges.</p>
+        <div class="code-pair">
+          <div>
+            <div class="code-label">During training</div>
+            <div class="code-block">
+              <pre>y_log = log(price)</pre>
+            </div>
+          </div>
+          <div>
+            <div class="code-label">At prediction time</div>
+            <div class="code-block">
+              <pre>price = exp(prediction)</pre>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
 
 
 
-    <!-- PART II -->
-    <div class="part-divider">
-      <div class="part-divider-line"></div>
-      <div class="part-divider-text">Part II — System Architecture</div>
-      <div class="part-divider-line"></div>
-    </div>
+      <!-- PART II -->
+      <div class="part-divider">
+        <div class="part-divider-line"></div>
+        <div class="part-divider-text">Part II — System Architecture</div>
+        <div class="part-divider-line"></div>
+      </div>
 
-    <!-- SEPARATION -->
-    <div class="doc-section" id="separation">
-      <div class="section-num">§ 08</div>
-      <h2>Training vs Inference Separation</h2>
-      <p>Training and prediction are fully decoupled for faster serving, simpler deployment, and reproducible behavior.</p>
-      <div class="code-pair">
-        <div>
-          <div class="code-label">Training pipeline</div>
-          <div class="code-block"><pre>data
+      <!-- SEPARATION -->
+      <div class="doc-section" id="separation">
+        <!-- <div class="section-num">§ 08</div> -->
+        <h2>Training vs Inference Separation</h2>
+        <p>Training and prediction are fully decoupled for faster serving, simpler deployment, and reproducible
+          behavior.</p>
+        <div class="code-pair">
+          <div>
+            <div class="code-label">Training pipeline</div>
+            <div class="code-block">
+              <pre>data
   ↓
 feature engineering
   ↓
 model training
   ↓
-saved artifact</pre></div>
-        </div>
-        <div>
-          <div class="code-label">Serving system</div>
-          <div class="code-block"><pre>load model
+saved artifact</pre>
+            </div>
+          </div>
+          <div>
+            <div class="code-label">Serving system</div>
+            <div class="code-block">
+              <pre>load model
   ↓
 encode features
   ↓
 run predictions
   ↓
-return response</pre></div>
+return response</pre>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- ARTIFACTS -->
-    <div class="doc-section" id="artifacts">
-      <div class="section-num">§ 09</div>
-      <h2>Model Artifacts</h2>
-      <p>The trained Random Forest pipeline — including feature encoders and the model — is saved as a single joblib artifact and loaded once at startup.</p>
-      <div class="code-block"><pre>
+      <!-- ARTIFACTS -->
+      <div class="doc-section" id="artifacts">
+        <!-- <div class="section-num">§ 09</div> -->
+        <h2>Model Artifacts</h2>
+        <p>The trained Random Forest pipeline — including feature encoders and the model — is saved as a single joblib
+          artifact and loaded once at startup.</p>
+        <div class="code-block">
+          <pre>
 <span class="c-cmt"># Artifact path</span>
 <span class="c-str">models/car_latest.joblib</span>
 
 <span class="c-cmt"># Contains</span>
 <span class="c-val">feature_encoder</span>   →  categorical encoding
 <span class="c-val">scaler</span>            →  numeric normalization
-<span class="c-val">rf_model</span>          →  trained Random Forest</pre></div>
-    </div>
+<span class="c-val">rf_model</span>          →  trained Random Forest</pre>
+        </div>
+      </div>
 
-    <!-- STRUCTURE -->
-    <div class="doc-section" id="structure">
-      <div class="section-num">§ 10</div>
-      <h2>Clean Project Structure</h2>
-      <div class="code-block"><pre>
+      <!-- STRUCTURE -->
+      <div class="doc-section" id="structure">
+        <!-- <div class="section-num">§ 10</div> -->
+        <h2>Clean Project Structure</h2>
+        <div class="code-block">
+          <pre>
 <span class="c-str">Car-Price-Prediction/</span>
 │
 ├── <span class="c-key">src/</span>
@@ -356,23 +444,27 @@ return response</pre></div>
 │
 ├── <span class="c-key">models/</span>          <span class="c-cmt"># Saved artifacts</span>
 ├── <span class="c-key">reports/</span>         <span class="c-cmt"># Evaluation outputs</span>
-└── <span class="c-key">tests/</span>           <span class="c-cmt"># Test suite</span></pre></div>
-    </div>
+└── <span class="c-key">tests/</span>           <span class="c-cmt"># Test suite</span></pre>
+        </div>
+      </div>
 
-    <!-- CONFIG -->
-    <div class="doc-section" id="config">
-      <div class="section-num">§ 11–13</div>
-      <h2>Configuration & Dependency Injection</h2>
-      <p>Environment variables control all path and runtime configuration, keeping dev, test, and prod cleanly separated. The prediction service receives the model as an external dependency.</p>
-      <div class="code-block"><pre>
+      <!-- CONFIG -->
+      <div class="doc-section" id="config">
+        <!-- <div class="section-num">§ 11–13</div> -->
+        <h2>Configuration & Dependency Injection</h2>
+        <p>Environment variables control all path and runtime configuration, keeping dev, test, and prod cleanly
+          separated. The prediction service receives the model as an external dependency.</p>
+        <div class="code-block">
+          <pre>
 <span class="c-key">MODEL_PATH</span>   <span class="c-sym">=</span> <span class="c-str">"models/car_latest.joblib"</span>
 <span class="c-key">APP_ENV</span>      <span class="c-sym">=</span> <span class="c-str">"production"</span>
-<span class="c-key">LOG_LEVEL</span>    <span class="c-sym">=</span> <span class="c-str">"info"</span></pre></div>
-    </div>
+<span class="c-key">LOG_LEVEL</span>    <span class="c-sym">=</span> <span class="c-str">"info"</span></pre>
+        </div>
+      </div>
 
-     <!-- API SERVICE -->
+      <!-- API SERVICE -->
       <div class="doc-section" id="api">
-        <div class="section-num">§ 14</div>
+        <!-- <div class="section-num">§ 14</div> -->
         <h2>FastAPI Inference Service</h2>
         <p>Three endpoints expose the model, health status, and metadata.</p>
         <div class="endpoint-list">
@@ -394,23 +486,26 @@ return response</pre></div>
         </div>
       </div>
 
-    <!-- TESTING -->
-    <div class="doc-section" id="testing">
-      <div class="section-num">§ 15–16</div>
-      <h2>Testing Strategy</h2>
-      <p>Multi-layer testing across API, business logic, feature encoding, and model loader — reaching <strong style="color:var(--navy)">~85% code coverage</strong>.</p>
-      <div class="code-block"><pre>
+      <!-- TESTING -->
+      <div class="doc-section" id="testing">
+        <!-- <div class="section-num">§ 15–16</div> -->
+        <h2>Testing Strategy</h2>
+        <p>Multi-layer testing across API, business logic, feature encoding, and model loader — reaching <strong
+            style="color:var(--navy)">~89% code coverage</strong>.</p>
+        <div class="code-block">
+          <pre>
 <span class="c-cmt"># Test layers</span>
 <span class="c-val">API Tests</span>        <span class="c-sym">→</span>  /health · /predict
 <span class="c-val">Feature Tests</span>    <span class="c-sym">→</span>  encoding · derived columns
 <span class="c-val">Logic Tests</span>      <span class="c-sym">→</span>  prediction wrapper
-<span class="c-val">Loader Tests</span>     <span class="c-sym">→</span>  mocked artifact loading</pre></div>
-      <div class="callout">
-        <strong>85% coverage</strong> ensures reliable predictions across all vehicle segments and edge cases.
+<span class="c-val">Loader Tests</span>     <span class="c-sym">→</span>  mocked artifact loading</pre>
+        </div>
+        <div class="callout">
+          <strong>89% coverage</strong> ensures reliable predictions across all vehicle segments and edge cases.
+        </div>
       </div>
-    </div>
 
-    <!-- DATABASE LOGGING -->
+      <!-- DATABASE LOGGING -->
       <div class="doc-section" id="database">
         <div class="section-num">§ 17</div>
         <h2>Observability via MySQL</h2>
@@ -426,58 +521,66 @@ return response</pre></div>
         </div>
       </div>
 
-    <!-- DOCKER -->
-    <div class="doc-section" id="docker">
-      <div class="section-num">§ 18–19</div>
-      <h2>Docker Containerization</h2>
-      <div class="code-block"><pre>
+      <!-- DOCKER -->
+      <div class="doc-section" id="docker">
+        <!-- <div class="section-num">§ 18–19</div> -->
+        <h2>Docker Containerization</h2>
+        <div class="code-block">
+          <pre>
 <span class="c-key">FROM</span>   python:3.11-slim
 <span class="c-key">COPY</span>   requirements.txt .
 <span class="c-key">RUN</span>    pip install -r requirements.txt
 <span class="c-key">COPY</span>   src/ models/ .
 <span class="c-key">CMD</span>    uvicorn car_price_prediction.api:app
 
-<span class="c-key">$</span> docker compose up</pre></div>
-    </div>
+<span class="c-key">$</span> docker compose up</pre>
+        </div>
+      </div>
 
-    <!-- HEALTH -->
-    <div class="doc-section" id="health">
-      <div class="section-num">§ 20–22</div>
-      <h2>Logging, Health & Model Metadata</h2>
-      <p>Structured logs and health endpoints enable monitoring and load balancer checks in production.</p>
-      <div class="code-pair">
-        <div>
-          <div class="code-label">GET /health</div>
-          <div class="code-block"><pre>
+      <!-- HEALTH -->
+      <div class="doc-section" id="health">
+        <!-- <div class="section-num">§ 20–22</div> -->
+        <h2>Logging, Health & Model Metadata</h2>
+        <p>Structured logs and health endpoints enable monitoring and load balancer checks in production.</p>
+        <div class="code-pair">
+          <div>
+            <div class="code-label">GET /health</div>
+            <div class="code-block">
+              <pre>
 {
   "status": "ok",
   "model_loaded": true
-}</pre></div>
-        </div>
-        <div>
-          <div class="code-label">GET /model-info</div>
-          <div class="code-block"><pre>
+}</pre>
+            </div>
+          </div>
+          <div>
+            <div class="code-label">GET /model-info</div>
+            <div class="code-block">
+              <pre>
 {
   "version": "1.0.0",
   "metrics": { ... }
-}</pre></div>
+}</pre>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- PART III -->
-    <div class="part-divider">
-      <div class="part-divider-line"></div>
-      <div class="part-divider-text">Part III — Frontend Application</div>
-      <div class="part-divider-line"></div>
-    </div>
+      <!-- PART III -->
+      <div class="part-divider">
+        <div class="part-divider-line"></div>
+        <div class="part-divider-text">Part III — Frontend Application</div>
+        <div class="part-divider-line"></div>
+      </div>
 
-    <!-- FRONTEND -->
-    <div class="doc-section" id="frontend">
-      <div class="section-num">§ 23</div>
-      <h2>Frontend Interaction Flow</h2>
-      <p>When a user clicks <em style="color:var(--navy)">Estimate Value</em>, a eleven-step chain connects the browser to the trained model.</p>
-      <div class="code-block"><pre>
+      <!-- FRONTEND -->
+      <div class="doc-section" id="frontend">
+        <!-- <div class="section-num">§ 23</div> -->
+        <h2>Frontend Interaction Flow</h2>
+        <p>When a user clicks <em style="color:var(--navy)">Estimate Value</em>, a eleven-step chain connects the
+          browser to the trained model.</p>
+        <div class="code-block">
+          <pre>
 <span class="c-sym">1</span>  User enters vehicle specs
 <span class="c-sym">2</span>  User clicks Estimate Value
 <span class="c-sym">3</span>  JavaScript collects input values
@@ -488,111 +591,128 @@ return response</pre></div>
 <span class="c-sym">8</span>  Model predicts
 <span class="c-sym">9</span>  API sends response
 <span class="c-sym">10</span>  Saves response to database
-<span class="c-sym">11</span> Frontend displays estimate</pre></div>
-    </div>
-
-    <!-- FULL ARCH -->
-    <div class="doc-section" id="fullarch">
-      <div class="section-num">§ 24–25</div>
-      <h2>Full System Architecture</h2>
-      <div class="arch-flow">
-        <div class="arch-node"><div class="arch-box highlight">Training Pipeline</div></div>
-        <div class="arch-arrow">↓</div>
-        <div class="arch-node"><div class="arch-box">Model Artifact</div></div>
-        <div class="arch-arrow">↓</div>
-        <div class="arch-node"><div class="arch-box">Feature Encoder + Prediction Wrapper</div></div>
-        <div class="arch-arrow">↓</div>
-        <div class="arch-node"><div class="arch-box">FastAPI Service</div></div>
-        <div class="arch-arrow">↓</div>
-        <div class="arch-node"><div class="arch-box">Docker Container</div></div>
-        <div class="arch-arrow">↓</div>
-        <div class="arch-node"><div class="arch-box">Response to Database </div></div>
-        <div class="arch-arrow">↓</div>
-        <div class="arch-node"><div class="arch-box">Frontend UI</div></div>
-        <div class="arch-arrow">↓</div>
-        <div class="arch-node"><div class="arch-box highlight">Users</div></div>
-      </div>
-    </div>
-
-    <!-- SKILLS -->
-    <div class="doc-section" id="skills">
-      <div class="section-num">§ 26–27</div>
-      <h2>Skills Developed</h2>
-      <div class="skills-grid">
-        <div class="skill-card">
-          <div class="skill-card-title">Machine Learning</div>
-          <div class="skill-item">Model training</div>
-          <div class="skill-item">Feature engineering</div>
-          <div class="skill-item">Hyperparameter tuning</div>
-          <div class="skill-item">Model evaluation</div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-card-title">Backend Engineering</div>
-          <div class="skill-item">FastAPI architecture</div>
-          <div class="skill-item">API design</div>
-          <div class="skill-item">Dependency injection</div>
-          <div class="skill-item">Request validation</div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-card-title">Software Engineering</div>
-          <div class="skill-item">Clean project structure</div>
-          <div class="skill-item">Testing discipline</div>
-          <div class="skill-item">Code coverage ~85%</div>
-          <div class="skill-item">Documentation</div>
-        </div>
-        <div class="skill-card">
-          <div class="skill-card-title">DevOps</div>
-          <div class="skill-item">Docker containerization</div>
-          <div class="skill-item">Environment config</div>
-          <div class="skill-item">Structured logging</div>
-          <div class="skill-item">Deployment readiness</div>
+<span class="c-sym">11</span> Frontend displays estimate</pre>
         </div>
       </div>
 
-    </div>
-
-    <!-- FUTURE -->
-    <div class="doc-section" id="future">
-      <div class="section-num">§ 28</div>
-      <h2>Future Improvements</h2>
-      <div class="future-grid">
-        <div class="future-card">
-          <div class="future-card-title">CI/CD</div>
-          <div class="future-item">GitHub Actions<br>Automated testing<br>Docker image builds</div>
-        </div>
-        <div class="future-card">
-          <div class="future-card-title">Cloud Deployment</div>
-          <div class="future-item">AWS / Render<br>Fly.io / Railway<br>Managed containers</div>
-        </div>
-        <div class="future-card">
-          <div class="future-card-title">Model Upgrades</div>
-          <div class="future-item">XGBoost / LightGBM<br>SHAP explainability<br>Real-time retraining</div>
+      <!-- FULL ARCH -->
+      <div class="doc-section" id="fullarch">
+        <!-- <div class="section-num">§ 24–25</div> -->
+        <h2>Full System Architecture</h2>
+        <div class="arch-flow">
+          <div class="arch-node">
+            <div class="arch-box highlight">Training Pipeline</div>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-node">
+            <div class="arch-box">Model Artifact</div>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-node">
+            <div class="arch-box">Feature Encoder + Prediction Wrapper</div>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-node">
+            <div class="arch-box">FastAPI Service</div>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-node">
+            <div class="arch-box">Docker Container</div>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-node">
+            <div class="arch-box">Response to Database </div>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-node">
+            <div class="arch-box">Frontend UI</div>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-node">
+            <div class="arch-box highlight">Users</div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- SUMMARY -->
-    <div class="doc-section summary-box">
-      <h2>Final Summary</h2>
-      <p>
-        This project demonstrates the transition from a research-focused workflow
+      <!-- SKILLS -->
+      <div class="doc-section" id="skills">
+        <!-- <div class="section-num">§ 26–27</div> -->
+        <h2>Skills Developed</h2>
+        <div class="skills-grid">
+          <div class="skill-card">
+            <div class="skill-card-title">Machine Learning</div>
+            <div class="skill-item">Model training</div>
+            <div class="skill-item">Feature engineering</div>
+            <div class="skill-item">Hyperparameter tuning</div>
+            <div class="skill-item">Model evaluation</div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-title">Backend Engineering</div>
+            <div class="skill-item">FastAPI architecture</div>
+            <div class="skill-item">API design</div>
+            <div class="skill-item">Dependency injection</div>
+            <div class="skill-item">Request validation</div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-title">Software Engineering</div>
+            <div class="skill-item">Clean project structure</div>
+            <div class="skill-item">Testing discipline</div>
+            <div class="skill-item">Code coverage ~89%</div>
+            <div class="skill-item">Documentation</div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-title">DevOps</div>
+            <div class="skill-item">Docker containerization</div>
+            <div class="skill-item">Environment config</div>
+            <div class="skill-item">Structured logging</div>
+            <div class="skill-item">Deployment readiness</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- FUTURE -->
+      <div class="doc-section" id="future">
+        <!-- <div class="section-num">§ 28</div> -->
+        <h2>Future Improvements</h2>
+        <div class="future-grid">
+          <div class="future-card">
+            <div class="future-card-title">CI/CD</div>
+            <div class="future-item">GitHub Actions<br>Automated testing<br>Docker image builds</div>
+          </div>
+          <div class="future-card">
+            <div class="future-card-title">Cloud Deployment</div>
+            <div class="future-item">AWS / Render<br>Fly.io / Railway<br>Managed containers</div>
+          </div>
+          <div class="future-card">
+            <div class="future-card-title">Model Upgrades</div>
+            <div class="future-item">XGBoost / LightGBM<br>SHAP explainability<br>Real-time retraining</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUMMARY -->
+      <div class="doc-section summary-box">
+        <h2>Final Summary</h2>
+        <p>
+          This project demonstrates the transition from a research-focused workflow
           to a production-grade ML system. By integrating the predictive power
           of <strong>Random Forest</strong> with the robustness of <strong>FastAPI</strong>
           and <strong>MySQL persistence</strong>, we created a full-stack solution
           that mirrors real-world machine learning engineering standards.
-      </p>
-      <div class="pill-list" style="margin-top:20px">
-        <span class="pill navy">Model Training</span>
-        <span class="pill forest">Feature Engineering</span>
-        <span class="pill gold">FastAPI Service</span>
-        <span class="pill">Automated Testing</span>
-        <span class="pill rust">Docker</span>
-        <span class="pill forest">Frontend UI</span>
-        <span class="pill gold">MySQL Database</span>
+        </p>
+        <div class="pill-list" style="margin-top:20px">
+          <span class="pill navy">Model Training</span>
+          <span class="pill forest">Feature Engineering</span>
+          <span class="pill gold">FastAPI Service</span>
+          <span class="pill">Automated Testing</span>
+          <span class="pill rust">Docker</span>
+          <span class="pill forest">Frontend UI</span>
+          <span class="pill gold">MySQL Database</span>
+        </div>
       </div>
-    </div>
 
-  </main>
+    </main>
 
 
   </div>
@@ -603,18 +723,58 @@ return response</pre></div>
     }, { threshold: 0.08 });
     document.querySelectorAll('.doc-section').forEach(el => observer.observe(el));
 
+    // const sections = document.querySelectorAll('.doc-section[id]');
+    // const links = document.querySelectorAll('.toc a');
+    // const tocObserver = new IntersectionObserver((entries) => {
+    //   entries.forEach(entry => {
+    //     if (entry.isIntersecting) {
+    //       links.forEach(l => l.classList.remove('active'));
+    //       const active = document.querySelector(`.toc a[href="#${entry.target.id}"]`);
+    //       if (active) active.classList.add('active');
+    //     }
+    //   });
+    // }, { rootMargin: '-20% 0px -70% 0px' });
+    // sections.forEach(s => tocObserver.observe(s));
+
+
     const sections = document.querySelectorAll('.doc-section[id]');
     const links = document.querySelectorAll('.toc a');
+    const sidebar = document.querySelector('.sidebar'); // Target the sidebar container
+
     const tocObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           links.forEach(l => l.classList.remove('active'));
           const active = document.querySelector(`.toc a[href="#${entry.target.id}"]`);
-          if (active) active.classList.add('active');
+
+          if (active) {
+            active.classList.add('active');
+            // This 1 line automatically scrolls the sidebar to keep the active link in view!
+            active.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
         }
       });
     }, { rootMargin: '-20% 0px -70% 0px' });
+
     sections.forEach(s => tocObserver.observe(s));
+
+
+    // --- SCROLL PROGRESS BAR LOGIC ---
+    window.addEventListener('scroll', () => {
+      // Calculate how far down the user has scrolled
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+
+      // Calculate the total scrollable height of the document
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+
+      // Convert to a percentage
+      const scrolled = (winScroll / height) * 100;
+
+      // Apply that percentage to the width of our progress bar
+      document.getElementById('scroll-progress').style.width = scrolled + '%';
+    });
+
+
   </script>
 </body>
 

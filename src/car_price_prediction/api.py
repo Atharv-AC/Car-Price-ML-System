@@ -116,7 +116,7 @@ async def lifespans(app: FastAPI):
     # Step 4: Setup database (non-blocking)
     # -----------------------------------------
     try:
-        wait_for_db(engine, retries=1, delay=1)
+        wait_for_db(engine, retries=10, delay=1)
         Base.metadata.create_all(bind=engine)
         logger.info("Database ready")
     except:
@@ -217,8 +217,8 @@ def predict_price(features: Car, model = Depends(get_model), db = Depends(get_db
 # get request for health check it ensures that the model is loaded and returns a true/false
 @app.get("/health")
 def health_info():
-    # if not app.state.model_loaded:
-    #     raise HTTPException(status_code=503, detail="Model not loaded")
+    if not app.state.model_loaded:
+        raise HTTPException(status_code=503, detail="Model not loaded")
     
     return {
             "status": "ok",
@@ -237,7 +237,10 @@ def load_model_metadata():
     try:
         with open(REPORT_PATH) as fi:
             model_summary = json.load(fi)
+            model_summary["model_file"] = str(settings.get_model_path())
+
             return model_summary
+        
     except Exception:
         logger.error("Model Metadata failed to load: ", exc_info=True)
         # 500 Internal Server Error
