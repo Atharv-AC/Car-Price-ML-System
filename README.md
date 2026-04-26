@@ -1,38 +1,81 @@
 
 # 🚗 Car Price Prediction — Production-Grade Machine Learning System
 
+
 ![Python](https://img.shields.io/badge/python-3.11-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-API-green)
 ![Docker](https://img.shields.io/badge/Docker-containerized-blue)
 ![MySQL](https://img.shields.io/badge/database-MySQL-orange)
 ![Scikit-learn](https://img.shields.io/badge/ML-scikit--learn-yellow)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
+![Tests](https://img.shields.io/badge/tests-89%25-green)
 
-A **production-style machine learning system** for predicting used car prices.
+A **production-grade machine learning system** for predicting used car prices,
+designed to demonstrate **real-world ML system design, deployment, and reliability**.
+---
 
-This project demonstrates how to build a **complete ML service**, moving beyond notebook experiments to a **deployable machine learning system** with:
+## 🚀 Live Demo
+
+👉 [https://car-price-ml-system.onrender.com/](https://car-price-ml-system.onrender.com/)
+
+---
+
+
+## 📌 Overview
+
+Most ML projects stop at notebooks.
+
+This project goes beyond typical ML workflows — implementing a **complete, deployable ML system** with:
 
 * structured training pipelines
-* artifact versioning
-* FastAPI inference service
-* prediction logging in a database
-* containerized deployment
+* model versioning
+* API-based inference (FastAPI)
+* database logging for predictions
+* containerized deployment (Docker)
 
-Unlike typical ML projects, this repository focuses on **machine learning system engineering**.
+It demonstrates how real-world ML systems are built, deployed, and maintained.
+
+> ⚡ This project is designed to reflect how ML systems are built in production — not just how models are trained.
+
+---
+
+## 🎯 Use Case
+
+Predict the selling price of used cars based on:
+- vehicle specifications
+- usage patterns
+- ownership details
+
+Useful for:
+- resale platforms
+- price estimation tools
+- dealership analytics
 
 ---
 
 
-## 🚀Live Demo:
-https://car-price-ml-system.onrender.com/
+## 💡 What This Project Demonstrates
 
----
+This project goes beyond typical ML workflows and focuses on **production-grade machine learning engineering**.
 
-# 🎯 System Overview
+It demonstrates:
 
-The system predicts **used car selling prices** using a **Random Forest regression model** and exposes predictions through a **FastAPI API**.
+- End-to-end ML system design — from data processing to deployment  
+- Clear separation of **training and inference pipelines**  
+- Model versioning with reproducibility and rollback capability  
+- Deployment of ML models as a **FastAPI service**  
+- Persistent prediction logging for monitoring and debugging  
+- Backend design patterns (repository pattern, dependency injection)  
+- Containerized deployment using Docker and Docker Compose  
+- Testing across API, database, and ML pipeline components  
 
-Every prediction request is logged in a **MySQL database**, enabling monitoring and debugging of model behavior.
+Unlike typical ML projects:
+
+- Not limited to Jupyter notebooks  
+- Emphasizes **system design over just model performance**  
+- Built with **production constraints and reliability in mind**  
+
+👉 This project reflects how real-world ML systems are **designed, deployed, and maintained in production environments**.
 
 ---
 
@@ -40,7 +83,7 @@ Every prediction request is logged in a **MySQL database**, enabling monitoring 
 
 ```bash
 git clone https://github.com/Atharv-AC/Car-Price-ML-System.git
-cd car-price-prediction
+cd Car-Price-ML-System
 docker compose up --build
 
 
@@ -51,6 +94,26 @@ http://localhost:8000/docs
 
 
 ---
+
+## ⚙️ Environment Configuration
+
+Create a `.env` file:
+
+```env
+APP_ENV=dev
+DATABASE_URL=mysql+pymysql://user:password@localhost:3306/car_price_db
+```
+
+### Environment Modes
+
+| Environment | DATABASE_URL        |
+| ----------- | ------------------- |
+| Local       | localhost           |
+| Docker      | db                  |
+| Testing     | sqlite:///./test.db |
+
+---
+
 
 ## 🔌 Example API Call
 
@@ -70,48 +133,6 @@ curl -X POST "http://localhost:8000/predict" \
 }'
 
 ```
-
----
-
-# 📚 Table of Contents
-
-* Overview
-* System Highlights
-* Key Features
-* System Architecture
-* Project Structure
-* Prediction Request Lifecycle
-* Model Training Pipeline
-* Model Versioning
-* Model Loading Strategy
-* Inference API
-* Database Logging
-* API Endpoints
-* Docker Deployment
-* Design Decisions
-* Technologies Used
-* Running the Project
-* Future Improvements
-* Author
-
----
-
-# 📌 Overview
-
-Machine learning models trained in notebooks are not enough for real-world systems.
-
-Production ML systems require:
-
-* reproducible training pipelines
-* model artifact management
-* inference APIs
-* monitoring and logging
-* containerized deployment
-
-This project demonstrates how to build such a **production-style ML service**.
-
-The system separates **training** and **inference**, a key architectural principle in production ML.
-
 ---
 
 # ⭐ System Highlights
@@ -126,22 +147,11 @@ The system separates **training** and **inference**, a key architectural princip
 
 ---
 
-# 🚀 Key Features
 
-* Machine learning model for **used car price prediction**
-* Structured ML project architecture
-* Reproducible training pipeline
-* Model artifact versioning
-* FastAPI inference API
-* Database logging of predictions
-* Containerized deployment with Docker
-* Multi-container orchestration using Docker Compose
-
----
 
 # 🏗 System Architecture
 
-The system consists of **three major layers**.
+The system is organized into **three layers**:
 
 ---
 
@@ -211,19 +221,15 @@ This ensures **reproducible deployment environments**.
 
 ---
 
-# 🔄 Prediction Request Lifecycle
+## 🔄 Prediction Request Lifecycle
 
-1️⃣ User submits car features through API request.
+1. Client sends request
+2. FastAPI validates input (Pydantic)
+3. Data preprocessing pipeline runs
+4. Model generates prediction
+5. Request + prediction stored in DB
+6. Response returned
 
-2️⃣ FastAPI validates input using **Pydantic schemas**.
-
-3️⃣ The prediction wrapper prepares the data.
-
-4️⃣ The trained **RandomForest model** generates a prediction.
-
-5️⃣ The prediction and input payload are stored in **MySQL**.
-
-6️⃣ The API returns the predicted price to the client.
 
 ---
 
@@ -249,11 +255,8 @@ car-price-prediction/
 ├── 📄 requirements.txt         # Python dependencies
 ├── 📄 pyproject.toml           # Packaging & build configuration
 │
-├── 📂 data/                    # Raw and processed datasets
+├── 📂 data/                    # datasets
 │   ├── Car_details.csv
-│   ├── cleaned_car_data.csv
-│   ├── cleaned_car_details.csv
-│   └── cleaned_car_out.csv
 │
 ├── 📂 models/                  # Trained models
 │   ├── latest.joblib          # Latest production model
@@ -316,6 +319,8 @@ The architecture separates:
 
 ---
 
+
+
 # 🤖 Model Training Pipeline
 
 The training pipeline performs the following steps:
@@ -358,14 +363,16 @@ RandomForestRegressor
 
 Performance:
 
-```
-Training R²: ~96%
-Testing R²: ~90%
-RMSE: ~0.20
-MAE: ~0.14
 
-Note: Metrics are computed on normalized/log-transformed target values.
-```
+| Metric | Value |
+|------|------|
+| Training R² | ~96% |
+| Testing R²  | ~90% |
+| RMSE        | ~0.20 |
+| MAE         | ~0.14 |
+
+> Metrics computed on log-transformed target variable
+
 
 The trained pipeline is saved as:
 
@@ -375,46 +382,110 @@ models/latest.joblib
 
 ---
 
-# 🧾 Model Versioning
+## 🧾 Model Versioning
 
-- Every training run saves a timestamped model:
-  models/versions/rf_20260312_183324.joblib
+* Timestamped models:
 
-- latest.joblib is a symlink / copy of best model
+  ```
+  models/versions/rf_YYYYMMDD.joblib
+  ```
+* `latest.joblib` → production model
+* API always loads latest
 
-- API always loads latest.joblib
+✔ Enables:
 
-This ensures:
-- reproducibility
-- rollback capability
+* reproducibility
+* rollback
+* experiment tracking
 
 ---
 
 # ⚙️ Model Loading Strategy
 
-- Model is loaded at API startup
-- Stored in memory for low-latency inference
-- Avoids reloading per request
+✔ Model loaded once at startup  
+✔ Stored in memory for fast inference  
+✔ No per-request loading overhead  
 
 ---
 
-# 🧪 Testing
+## 🧪 Testing
 
 Includes:
 
-- Unit Tests:
-  - prediction logic
-  - data loader
-  - repository layer
+* Unit tests (prediction, validation, loader, repository)
+* API testing using FastAPI TestClient
+* Database testing with isolated test DB
+* Integration test (API + MySQL)
 
-- Integration Tests:
-  - MySQL connection
+Run:
 
-Run tests:
-
+```bash
 pytest
+pytest --cov=src
+```
+
+### ✅ Test Coverage: **89%**
+
+> ✔ Covers API, database, and ML pipeline components
 
 ---
+
+
+## 🧠 Production Considerations
+
+- Non-blocking startup using background model loading
+- Database retry mechanism to handle container startup race conditions
+- Dependency injection for clean architecture and testability
+- Repository pattern for database abstraction
+- Environment-based configuration system
+
+
+
+
+## ✅ Input Validation
+
+The system enforces strict validation:
+
+- No missing or extra fields
+- Numeric fields must be valid and non-negative
+- Categorical fields must match training values
+
+This ensures prediction consistency and prevents silent failures.
+
+
+## 📊 Logging
+
+- Structured logging for model loading and prediction flow
+- Error logging for debugging failures
+- Useful for monitoring in production environments
+
+
+## ⚠️ Limitations
+
+- Model trained on limited dataset
+- No real-time model monitoring (model performance is not tracked over time)
+- No feature drift detection
+- No authentication on API
+
+
+## 🔄 CI/CD (Planned)
+
+- Automated testing pipeline
+- Docker image build & push
+- Deployment automation
+
+
+## 📊 Failure & Tradeoffs
+
+- Linear models underperformed due to non-linear relationships
+- RandomForest chosen for better generalization
+
+### Known Weaknesses:
+- Sensitive to unseen categorical values
+- Performance may degrade with data distribution shifts
+
+---
+
 
 # ⚡ Inference API
 
@@ -430,37 +501,26 @@ Responsibilities:
 
 ---
 
-# 🗄 Database Logging
+## 🗄 Database Logging
 
-Every prediction request is logged in a **MySQL database**.
+Every prediction is stored:
 
-Table structure:
+**Table: `predictions`**
 
-```
-predictions
-```
+| Column          | Description  |
+| --------------- | ------------ |
+| id              | Unique ID    |
+| timestamp       | Request time |
+| features        | Input JSON   |
+| predicted_price | Model output |
+| model_version   | Version used |
 
-Columns:
 
-```
-id
-timestamp
-features (JSON)
-predicted_price
-model_version
-```
+✔ Enables:
 
-Example record:
-
-```
-{
-  "features": {...},
-  "predicted_price": 536241,
-  "model_version": "rf_latest"
-}
-```
-
-This enables **prediction auditing and monitoring**.
+* monitoring
+* debugging
+* auditing
 
 ---
 
@@ -473,6 +533,7 @@ This enables **prediction auditing and monitoring**.
 | `/model-info` | GET    | Metadata of deployed model    |
 
 ---
+
 
 ## Health Check
 
@@ -517,7 +578,36 @@ Example response:
 
 ```json
 {
-  "Prediction": 536241
+  "prediction": 536241 
+}
+```
+
+---
+
+
+## ❌ Error Responses
+
+### Model Not Ready (503)
+
+```json
+{
+  "detail": "Model is still loading"
+}
+```
+
+### Validation Error (422)
+
+```json
+{
+  "detail": [...]
+}
+```
+
+### Metadata Failure (500)
+
+```json
+{
+  "detail": "Model Metadata not found"
 }
 ```
 
@@ -529,7 +619,7 @@ The system is containerized using **Docker**.
 
 ---
 
-## Docker Compose (Recommended)
+## Docker Compose 
 
 Run the full system:
 
@@ -575,6 +665,21 @@ http://localhost:8000/docs
 ### Why MySQL Logging?
 - Enables auditability of predictions
 - Supports future monitoring pipelines
+
+
+### Why FastAPI?
+- High performance
+- Built-in validation
+- Async support
+
+### Why Docker?
+- Reproducible environments
+- Simplifies deployment
+
+### Why Pipeline Architecture?
+- Separates preprocessing and model logic
+- Ensures training/inference consistency
+
 
 ---
 
@@ -640,17 +745,19 @@ Machine Learning Engineering Project
 # ⭐ Why This Project Matters
 
 
-This project focuses on **operationalizing ML**, not just training models.
+This project demonstrates real-world ML challenges:
 
-It demonstrates how to move from:
-- notebooks → production systems
+- Bridging training and inference environments
+- Handling model lifecycle and versioning
+- Ensuring API reliability under partial system failure
+- Maintaining testable and modular backend architecture
 
-with:
-* reproducible training pipelines
-* model artifact management
-* API-based inference
-* database logging
-* containerized deployment
+These practices reflect how **real-world ML systems are designed, deployed, and maintained in production environments**.
 
-These practices reflect **real-world ML engineering workflows**.
+---
 
+
+
+# 🚀 Final Note
+
+This is not just a model — it is a **production-ready machine learning system built with real-world engineering principles**.
