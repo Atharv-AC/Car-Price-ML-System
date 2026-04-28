@@ -38,6 +38,9 @@ class Settings(BaseSettings):
         if self.database_url:
             return self.database_url
         
+        if self.app_env == "test":
+            return "sqlite:///./test.db"
+        
         # Fail fast
         raise ValueError("DATABASE_URL is not set")
 
