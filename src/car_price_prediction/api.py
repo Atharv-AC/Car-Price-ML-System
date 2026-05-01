@@ -13,7 +13,7 @@ from sqlalchemy.exc import OperationalError
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
-
+from fastapi import BackgroundTasks
 
 
 
@@ -185,11 +185,39 @@ def get_db():
 # with open(REPORT_DIR, "r") as f:
 #     data = json.load(f)
 
+# Load model metadata (like model version info) once at startup
 with open(REPORT_DIR) as f:
     MODEL_METADATA = json.load(f)
 
+
+
+def save_prediction_task(features, price, version):
+
+    # This function runs in the background AFTER response is sent
+
+    # Create a NEW DB session (important: request DB is already closed)
+    db = SessionLocal()
+
+    try:
+        # Save prediction details into database
+        save_prediction(
+            session=db,
+            features=features,
+            price=price,
+            version=version
+        )
+
+    except Exception as e:
+        # If DB write fails, log error (but DO NOT crash API)
+        logger.error(f"Background DB save failed: {e}", exc_info=True)
+
+    finally:
+        db.close()
+
+
+
 @app.post("/predict-car")
-def predict_price(features: Car, model = Depends(get_model), db = Depends(get_db)): # dependincy injection for database and model
+def predict_price(features: Car, background_tasks: BackgroundTasks, model = Depends(get_model)): # dependincy injection for model
 
 
     # * Convert validated Pydantic model to dict before passing into model wrapper.
@@ -198,13 +226,13 @@ def predict_price(features: Car, model = Depends(get_model), db = Depends(get_db
 
  
     try:
-       if db and settings.app_env != "test":
-        save_prediction(
-            session=db,
-            features=input_data,
-            price=float(price),
-            version=str(MODEL_METADATA)
-        )
+       if settings.app_env != "test":
+        background_tasks.add_task(         #* here background_tasks.add_task(func, arg1, arg2, arg3)
+                save_prediction_task,      #* is equivalent to func(arg1, arg2, arg3)  
+                input_data,                             #* means save_prediction_task(input_data, price, MODEL_METADATA)
+                float(price),
+                str(MODEL_METADATA)
+            )
 
     except Exception:
         # logger.warning("Failed to save prediction to DB", exc_info=True)
@@ -278,3 +306,18 @@ def get_predictions(db = Depends(get_db)):
 #   "transmission": "Manual",
 #   "owner": "First Owner"
 # }
+
+
+
+#? Flow Before:
+# Request → Prediction → DB Save → Response
+
+
+#? Flow Now:
+# Request → Prediction → Response (fast)
+#                           ↓
+#                    DB Save (background)
+
+# ✅ User doesn’t wait
+# ✅ System feels faster
+
