@@ -408,6 +408,35 @@ models/latest.joblib
 
 ---
 
+## ⚡ Performance & Load Testing
+
+### 🔍 Latency Analysis (Production)
+
+| Scenario                         | Latency |
+| -------------------------------- | ------- |
+| Local (Docker)                   | ~48 ms  |
+| Production (Before Optimization) | ~650 ms |
+| Production (After Optimization)  | ~400 ms |
+
+
+
+### 🚀 Optimization Applied
+
+* Moved database logging to FastAPI BackgroundTasks
+* Eliminated blocking I/O during request handling
+* Created independent DB session for background execution
+
+
+
+### 📈 Impact
+
+* ~35% reduction in API latency
+* Improved response consistency (reduced variance)
+* Faster user response without waiting for database operations
+
+
+----
+
 ## 🧪 Testing
 
 Includes:
