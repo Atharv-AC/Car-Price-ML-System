@@ -118,7 +118,7 @@ DATABASE_URL=mysql+pymysql://user:password@localhost:3306/car_price_db
 ## 🔌 Example API Call
 
 ```bash
-curl -X POST "http://localhost:8000/predict" \
+curl -X POST "http://localhost:8000/predict-car" \
 -H "Content-Type: application/json" \
 -d '{
   "mileage": 12,
@@ -529,7 +529,7 @@ Every prediction is stored:
 | Endpoint      | Method | Description                   |
 | ------------- | ------ | ----------------------------- |
 | `/health`     | GET    | Service health check          |
-| `/predict`    | POST   | Generate car price prediction |
+| `/predict-car`    | POST   | Generate car price prediction |
 | `/model-info` | GET    | Metadata of deployed model    |
 
 ---
@@ -555,7 +555,7 @@ Response:
 ## Prediction Endpoint
 
 ```
-POST /predict
+POST /predict-car
 ```
 
 Example request:
