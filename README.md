@@ -435,6 +435,29 @@ models/latest.joblib
 * Faster user response without waiting for database operations
 
 
+### 📊 Load Testing (k6)
+
+| Users | Avg Latency  | P95   | Status               |
+| ----- | ------------ | ----- | -------------------- |
+| 10    | ~2.7s        | ~3.7s | Stable               |
+| 20    | ~5.6s        | ~8.2s | Stable               |
+| 30    | ~5–6s        | ~10s  | Partial degradation  |
+| 80    | High failure | -     | System limit reached |
+
+
+### 🧠 Key Insights
+
+* Model inference is fast (~30ms)
+* Network + infrastructure dominate latency (~90%)
+* DB writes were a major blocking factor
+* System is limited by single-instance deployment (Render free tier)
+
+
+### ⚠️ Tradeoffs
+
+* Database logging is now eventually consistent
+* API prioritizes fast response over strict logging guarantees
+
 ----
 
 ## 🧪 Testing
