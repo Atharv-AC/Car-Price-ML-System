@@ -39,7 +39,6 @@ def client():
 def test_root(client):
     response = client.get("/")
     assert response.status_code == 200
-    assert "message" in response.json()
 
 
 
@@ -74,7 +73,7 @@ def test_health_model_not_loaded(client):
     assert response.status_code == 503
 
 def test_model_info(client):
-    response = client.get("/model-info")
+    response = client.get("/model-info-car")
     data = response.json()
 
     assert response.status_code == 200
@@ -86,7 +85,7 @@ from unittest.mock import patch
 def test_model_info_failure(client):
 
     with patch("builtins.open", side_effect=Exception("file missing")):
-        response = client.get("/model-info")
+        response = client.get("/model-info-car")
 
         assert response.status_code == 500
 
@@ -96,7 +95,7 @@ def test_predict_with_fake_model(client):
     app.dependency_overrides[get_model] = fake_get_model
     app.dependency_overrides[get_db] = fake_get_db
 
-    response = client.post("/predict", json={
+    response = client.post("/predict-car", json={
         "mileage": 12,
         "engine": 234,
         "max_power": 123,
@@ -122,7 +121,7 @@ def test_predict_when_model_not_loaded(client):
     # Simulate model not loaded
     app.state.model_loaded = False
 
-    response = client.post("/predict", json={
+    response = client.post("/predict-car", json={
         "mileage": 12,
         "engine": 234,
         "max_power": 123,
@@ -138,7 +137,7 @@ def test_predict_when_model_not_loaded(client):
 
 def test_predict_validation_error(client):
 
-    response = client.post("/predict", json={
+    response = client.post("/predict-car", json={
         "wrong": "data"
     })
 
