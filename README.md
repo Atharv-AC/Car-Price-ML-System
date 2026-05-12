@@ -1,5 +1,5 @@
 
-# 🚗 Car Price Prediction — Production-Grade Machine Learning System
+# 🚗 Car Price Prediction — Production-Oriented ML Engineering System
 
 
 ![Python](https://img.shields.io/badge/python-3.11-blue)
@@ -10,7 +10,7 @@
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
 ![Tests](https://img.shields.io/badge/tests-89%25-green)
 
-A **production-grade machine learning system** for predicting used car prices,
+A **production-oriented machine learning system** for predicting used car prices,
 designed to demonstrate **real-world ML system design, deployment, and reliability**.
 ---
 
@@ -56,7 +56,7 @@ Useful for:
 
 ## 💡 What This Project Demonstrates
 
-This project goes beyond typical ML workflows and focuses on **production-grade machine learning engineering**.
+This project goes beyond typical ML workflows and focuses on **production-oriented machine learning engineering**.
 
 It demonstrates:
 
