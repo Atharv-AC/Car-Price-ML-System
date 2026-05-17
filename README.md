@@ -430,7 +430,7 @@ models/latest.joblib
 
 ### 📈 Impact
 
-* ~35% reduction in API latency
+* ~38% reduction in API latency
 * Improved response consistency (reduced variance)
 * Faster user response without waiting for database operations
 
